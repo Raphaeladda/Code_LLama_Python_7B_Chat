@@ -9,7 +9,6 @@ import streamlit as st
 
 
 
-
 st.set_page_config(page_title="LLaMA code python - An AI assistant Streamlit app")
 
 # Sidebar contents
