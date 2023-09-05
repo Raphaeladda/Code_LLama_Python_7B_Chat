@@ -5,12 +5,13 @@ import urllib.request
 
 ## We load the codellama python 7b model
 
-
 def download_file(file_link, filename):
     '''
     Function to download a file on the current directory'''
     # Checks if the file already exists before downloading
     if not os.path.isfile(filename):
+
+        
         print("Model File is curently downloading …")
         urllib.request.urlretrieve(file_link, filename)
         print("File downloaded successfully.")
