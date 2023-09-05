@@ -2,7 +2,7 @@
 
 **LLama code python 7B Web App by Raphael Adda**
 
-It is a chat where we can interact with the code llama python 7B llm using a cpu only
+It is a chat designed to interact with the code llama python 7B llm using a cpu only
 
 - Clone this directory  
   
