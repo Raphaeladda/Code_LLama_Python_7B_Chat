@@ -1,6 +1,9 @@
-from llama_cpp import Llama
 import os
 import urllib.request
+from langchain.agents import AgentType, initialize_agent, load_tools
+from langchain.callbacks import StreamlitCallbackHandler
+from langchain.llms import LlamaCpp
+from langchain import PromptTemplate, LLMChain
 
 
 ## We load the codellama python 7b model
@@ -24,24 +27,25 @@ filename = "codellama-7b-python.Q5_K_M.gguf"
 
 download_file(gguf_model_path, filename)
 
-llm = Llama(model_path=os.path.join(os.getcwd(), "codellama-7b-python.Q5_K_M.gguf"))
+llm = LlamaCpp(model_path=os.path.join(os.getcwd(), "codellama-7b-python.Q5_K_M.gguf"),    temperature=0.1,
+    max_tokens=512,
+    top_p=0.1,
+    verbose=True, # Verbose is required to pass to the callback manager
+)
+
+## Defining prompt template
+
+template = """Question: {question}
+
+Answer: Let's work this out in a step by step way to be sure we have the right answer."""
+
+prompt = PromptTemplate(template=template, input_variables=["question"])
+llm_chain = LLMChain(prompt=prompt, llm=llm)
 
 
 def generate_text(
-    prompt='Write only: "Write something please"',
-    max_tokens=512,
-    temperature=0.1,
-    top_p=0.1,
-    echo=False,
-    stop=[],
+    question='Write only: "Write something please"',
 ):
-    output = llm(
-        prompt,
-        max_tokens=max_tokens,
-        temperature=temperature,
-        top_p=top_p,
-        echo=echo,
-        stop=stop,
-    )
-    output_text = output["choices"][0]["text"].strip()
-    return output_text
+    llm_model = LLMChain(prompt=prompt, llm=llm)
+
+    return llm_model.run(question)
